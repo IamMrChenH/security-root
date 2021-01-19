@@ -1,8 +1,9 @@
-package org.iammrchenh.infrastructure.security.core.service;
+package org.iammrchenh.infrastructure.security.login.config;
 
-import org.iammrchenh.infrastructure.security.core.SecurityCoreProperties;
-import org.iammrchenh.infrastructure.security.core.handler.LoginAndAuthenticationFailureHandler;
-import org.iammrchenh.infrastructure.security.core.handler.LoginAndAuthenticationSuccessHandler;
+import org.iammrchenh.infrastructure.security.login.SecurityCoreProperties;
+import org.iammrchenh.infrastructure.security.login.handler.LoginFailureHandler;
+import org.iammrchenh.infrastructure.security.login.handler.LoginSuccessHandler;
+import org.iammrchenh.infrastructure.security.login.handler.LogoutSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -32,16 +33,17 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         super.configure(http);
         http.formLogin()
-                .loginPage(properties.getLoginUrl())
-                .successHandler(new LoginAndAuthenticationSuccessHandler())
-                .failureHandler(new LoginAndAuthenticationFailureHandler())
+                .successHandler(new LoginSuccessHandler())
+                .failureHandler(new LoginFailureHandler())
                 .and()
                 .logout()
                 .logoutUrl(properties.getLogoutUrl())
-                .logoutSuccessHandler(null)
+                .logoutSuccessHandler(new LogoutSuccessHandler())
+                .and()
+                .authorizeRequests()
                 .and()
                 .sessionManagement()
-                .maximumSessions(properties.getSessionMaxCount());
+                .maximumSessions(properties.getMaximumSessions());
 
     }
 

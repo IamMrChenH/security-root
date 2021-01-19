@@ -1,4 +1,4 @@
-package org.iammrchenh.infrastructure.security.core;
+package org.iammrchenh.infrastructure.security.login;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
  */
 @Data
 @Configuration
-@ConfigurationProperties("infrastructure.security.core")
+@ConfigurationProperties("infrastructure.security.login")
 public class SecurityCoreProperties {
 
     /**
@@ -24,6 +24,6 @@ public class SecurityCoreProperties {
     /**
      * 同时允许登录个数，sesstion数量，
      */
-    private Integer sessionMaxCount = 1;
+    private Integer maximumSessions = 1;
 
 }

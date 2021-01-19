@@ -1,5 +1,6 @@
-package org.iammrchenh.infrastructure.security.core.handler;
+package org.iammrchenh.infrastructure.security.login.handler;
 
+import lombok.extern.slf4j.Slf4j;
 import org.iammrchenh.infrastructure.security.common.basic.AuthorityUser;
 import org.iammrchenh.infrastructure.security.common.event.LoginSuccessEvent;
 import org.iammrchenh.infrastructure.security.common.utils.ApplicationContextUtils;
@@ -16,14 +17,21 @@ import java.io.IOException;
  * @date 2021/1/18
  * 登录成功的处理程序
  */
-public class LoginAndAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
+@Slf4j
+public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 
     @Override
-    public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
+    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+        log.info("登录成功");
+        log.info("{}", authentication.getDetails());
+        log.info("{}", authentication.getPrincipal());
+        log.info("{}", authentication.getCredentials());
+        log.info("{}", authentication.getName());
+
         //发布登录成功事件
         if (authentication.getDetails() instanceof AuthorityUser) {
             final String username = ((AuthorityUser) authentication.getDetails()).getUsername();
-            ApplicationContextUtils.publishEvent(LoginSuccessEvent.createEvent(username));
+            ApplicationContextUtils.publishEvent(new LoginSuccessEvent(request, response, authentication));
         }
 
     }
